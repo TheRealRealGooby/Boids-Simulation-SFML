@@ -5,7 +5,8 @@
 #include <ctime>
 
 // Constructor
-Boid::Boid(sf::Vector2f windowSize) {
+Boid::Boid(sf::Vector2f windowSize) 
+{
     int h = windowSize.y;
     int w = windowSize.x;
 
@@ -19,7 +20,6 @@ Boid::Boid(sf::Vector2f windowSize) {
     boid.setOutlineColor(sf::Color::White);
     boid.setOutlineThickness(1);
     boid.setOrigin(0, 2);
-    boid.setFillColor(sf::Color::Yellow);
 
     // Random starting rotation & position
     boid.setRotation(static_cast<float>(std::rand() % 360));
