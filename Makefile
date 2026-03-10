@@ -1,27 +1,37 @@
-# GNU C++ Compiler
+# Makefile for Boid (birdoid objects) vs Hoid (humanoid objects) architectures
+
 CXX = g++
-
-# Setăm flag-urile de compilare:
-# -Wall - show all warnings
-# -Iinclude - search for header files in include folder
-CXXFLAGS = -Wall -Iinclude
-
-# Linking flags for SFML library
+CXXFLAGS = -Wall -Iinclude -MMD -MP
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
-# Source .cpp files
-SRC = src/main.cpp src/Boid.cpp
+# Final executable names
+EXEC_BOID = simulare_boid
+EXEC_HOID = simulare_hoid
 
-# Final executable file name
-TARGET = simulare
+# Object files for boid simulation
+OBJ_BOID = src/main_boid.o src/Boid.o
 
-# Default rule
-all: $(TARGET)
+# Object files for hoid simulation
+OBJ_HOID = src/main_hoid.o src/Hoid.o
 
-# Executable file construction rule
-$(TARGET): $(SRC)
-	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS)
+# Build both executables by default
+all: $(EXEC_BOID) $(EXEC_HOID)
 
-# 'make clean' rule
+# Link boid simulation components
+$(EXEC_BOID): $(OBJ_BOID)
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+# Link hoid simulation components
+$(EXEC_HOID): $(OBJ_HOID)
+	$(CXX) $^ -o $@ $(LDFLAGS)
+
+# Rule for compiling .cpp source files to .o object files
+src/%.o: src/%.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Include dependency files for Boid and Hoid classes
+-include src/*.d
+
+# Remove object files, dependency files, and executables
 clean:
-	rm -f $(TARGET)
+	rm -f src/*.o src/*.d $(EXEC_BOID) $(EXEC_HOID)
